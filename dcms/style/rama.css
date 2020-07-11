@@ -1,0 +1,243 @@
+/*
+Сортировка макетов
+*/
+
+
+div.table{
+	margin:20px 0;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+
+
+div.table-header{
+	padding:8px 12px 8px 23px;
+	margin-bottom:-20px;
+	color:#999;
+	font-size:8pt;
+	overflow:hidden;
+}
+
+div.table-header div{
+	display:inline-block;
+}
+
+div.col{
+	display:inline-block;
+}
+
+div.col *{width:90%;}
+
+div.col.w50px{width:50px;}
+div.col.w100px{width:100px;}
+div.col.w150px{width:150px;}
+div.col.w200px{width:200px;}
+
+div.table div.row, .ui-state-highlight{
+	padding:8px 12px 8px 5px;
+	margin-bottom:-1px;
+	border:1px #ccc solid;
+	cursor:move;
+	overflow:hidden;
+}
+
+.ui-sortable-helper{
+	box-shadow: 5px 5px 15px #ccc;
+	-moz-box-shadow: 5px 5px 15px #ccc;
+	-webkit-box-shadow: 5px 5px 15px #ccc;
+}
+
+div.table div.row input[type='text']{
+	border:1px transparent solid;
+	background-color:transparent;
+	padding:2px;
+	position:relative;
+	z-index:1;
+}
+
+div.table div.row input[type='text']:hover , div.table div.row  input[type='text']:active{
+	border-color:#ccc;
+	background-color:#fff;
+	z-index:9999;
+}
+
+div.table div.row div.chzn-container{
+	
+}
+
+div.table div.row div.chzn-container a.chzn-single{
+
+}
+
+div.table#sortable{
+	background:transparent url('gfx/bg50w.png');
+}
+
+div.table#sortable:hover{
+	box-shadow:  0 1px 10px #CCC;
+	-moz-box-shadow:  0 1px 10px #CCC;
+	-webkit-box-shadow:  0 1px 10px #CCC;
+}
+	
+div.table#sortable div.row{
+	background-image:url('gfx/grippy.png');
+	background-position:10px center;
+	background-repeat:no-repeat;
+	padding-left:23px!important;
+	position:relative;
+}
+
+
+div.table#sortable div.row input.locked{
+	padding-top:12px;
+}
+
+div.table#sortable div.row a.edit{
+	display:block;
+	visibility:hidden;
+	opacity:0.5;
+	width:22px;
+	height:22px;
+	margin-right:5px;
+	float:right;
+	cursor:pointer;
+	background:transparent url('gfx/edit.png') right center no-repeat;
+}
+
+div.table#sortable div.row:hover a.edit{visibility:visible;}
+div.table#sortable div.row:hover a.edit:hover{opacity:1;}
+
+div.table#sortable div.row a.lock{
+	display:inline-block;
+	visibility:visible;
+	opacity:0.5;
+	width:22px;
+	height:18px;
+	margin-right:10px;
+	cursor:pointer;
+	background:transparent url('gfx/locked.png') right center no-repeat;
+}
+
+div.table#sortable div.row:hover a.lock{visibility:visible;}
+div.table#sortable div.row:hover a.lock:hover{opacity:1;}
+
+div.table#sortable div.row a.delete{
+	display:block;
+	visibility:hidden;
+	opacity:0.5;
+	width:22px;
+	height:22px;
+	float:right;
+	cursor:pointer;
+	background:transparent url('gfx/delete.png') right center no-repeat;
+}
+
+div.table#sortable div.row:hover a.delete{visibility:visible;}
+div.table#sortable div.row:hover a.delete:hover{opacity:1;}
+
+div.table div.row:first-child{
+	-webkit-border-top-left-radius: 3px;
+	-webkit-border-top-right-radius: 3px;
+	-moz-border-radius-topleft: 3px;
+	-moz-border-radius-topright: 3px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+}
+
+div.table div.row:last-child{
+	-webkit-border-bottom-right-radius: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+	-moz-border-radius-bottomright: 3px;
+	-moz-border-radius-bottomleft: 3px;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+	
+/*jQuery styles*/
+
+#sortable{
+
+}
+
+#sortable a {
+
+}
+
+html>body #sortable a {
+
+}
+
+.ui-state-highlight {
+	background:#eee url('gfx/bg50w.png');
+	height:22px;
+}
+
+table{
+	margin:20px 0;
+	border:1px #ccc solid;
+	border-collapse:collapse;
+	z-index:10;
+}
+
+table td{
+	border:1px #ccc solid;
+	padding:0.5em 0.5em;
+	text-align:center;
+	-webkit-transition: background-color .1s linear;
+	-moz-transition: background-color .1s linear;
+}
+
+table td:hover{
+	background-color:#eff3fb;
+}
+
+table td img{
+	-webkit-box-shadow:none;
+	-moz-box-shadow:none;
+	box-shadow:none;
+}
+
+
+/*tree
+*/
+ul.hide { display:none;}
+
+
+/*dathim mod*/
+.fon_red{
+	background-color:#fee;
+}
+
+.fon_gren{
+	background-color:#efe;
+}
+
+.fon_red:hover{
+	background-color:#fdd;
+}
+
+.fon_gren:hover{
+	background-color:#dfd;
+}
+
+
+a._mastername{
+	width:30px;
+	height:30px;
+	display:inline-block;
+	float:right;
+	overflow:hidden;
+	margin:20px 0 0 0;
+	text-decoration:none;
+	color:#333;
+	background:transparent url('gfx/accept.png') center center no-repeat;
+	background-size:24px;
+	opacity:0.5;
+}
+
+a._mastername:hover{
+	background:transparent url('gfx/accept.png') center center no-repeat;
+	opacity:1;
+}
