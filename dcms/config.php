@@ -7,15 +7,15 @@
 30.8.2013  Доработан режим пользователя редактор
  
 */
-$url = 'http://dcms4.ru/'; //must end "/"
+$url = 'http://dcms.test/'; //must end "/"
 $path_name_parser = "";   // обработка url путей
 //ru,com.. - 
 //rf  -
 
 $hostname = 'localhost';
-$username = 'dcms4_ru';
-$password = 'dcms4_ru';
-$database = 'test1'; 
+$username = 'mysql';
+$password = 'mysql';
+$database = 'dcms4'; 
 $version = '4.72 GAMMA'; 
 $mod_def = 'page';
 
@@ -24,7 +24,7 @@ $dcms_debug_mod = true; // default false;
 $url_save_mod = true;  // default true;
 
 //new 4.50131
-$fake_admin = false; // default false;
+$fake_admin = true; // default false;
 
 
 $use_rf_domain = false; 

@@ -555,122 +555,126 @@ Class func {
 			$d_mq_res = db::$mysqli->query($d_sql_q);
 			if(!$d_mq_res) exit('bad_query '  . $d_sql_q);
 			while ($obj = $d_mq_res->fetch_object()) {	$d_all_page_items[] = $obj; }
-		
-			//переменные функции
-			$url  =  $dcms->url; 
-			$keywords = $page[0]->keyw;
-			$title = $page[0]->title;
-			$parent = $page[0]->parent;
-			$description = $page[0]->descr;
-			$name = $page[0]->name;
-			$path = $page[0]->path;
-			$brunch = $dcms->func->segment_url($url);
 			
-			//bar
-			//if ($this->is_login() == true) 	echo $this->show_bar($name,$url,$id,$dcms,$page[0]->design);
-			
-			//Перебор всех элементов страницы
-			foreach($d_all_page_items as $d_iid)
-			{
-				if ((isset($d_iid->ful_copy_id)) && ($d_iid->ful_copy_id != 0 )){ //элементы ссылающиеся на другие
-					$copy_text = $dcms->db->select("designes_items","id='".$d_iid->ful_copy_id."'");
-					eval('?>'.$copy_text[0]->text);
-				} else {
-					if ($d_iid->komp == 0)	{ eval('?>'.$d_iid->text);	} // элементы текст / php
-					else { // элементы  компоненты
-						$use_com = $d_iid->komp;
-						$com = $dcms->db->select("coms","id='".$use_com."'"); 
-						$com_filds = $dcms->db->select("coms_fields","parent='".$com[0]->id."' AND type=14"); 
-						//print_r($com_filds); //!
-						if ($com[0]->query == '') $query = 'ORDER BY d_sort ASC'; else $query = $com[0]->query;
-						{
-							$tab_name = $com[0]->table_name;
-							eval('?>'.$com[0]->code);
-							$pagination='';
-							$addp_sql='';
-								/* pagination*/
-								
-								$sqlcount = db::$mysqli->query("SELECT id FROM ".$tab_name." WHERE page_item=".$d_iid->id); 
-								$rowcount = $sqlcount->num_rows;
-								
-								$total = $rowcount[0]; // всего записей
-								//echo $total;	
-								if ((isset($page_size)) && ($total > $page_size )){ //Пагинация доступна под $pagination;
-									$pagination = '<ul class="pagination">';
-									$pahe_count = ceil($total/$page_size); 
-									$page_num = 0;
-									$p_min = 0;
-									$p_count = $page_size;
-									if ((isset($_GET['page'])) && ($_GET['page'] <> 1)) {
-										$p_min = $_GET['page']*$page_size-$page_size;
+			if (isset($d_all_page_items)){
+				//переменные функции
+				$url  =  $dcms->url; 
+				$keywords = $page[0]->keyw;
+				$title = $page[0]->title;
+				$parent = $page[0]->parent;
+				$description = $page[0]->descr;
+				$name = $page[0]->name;
+				$path = $page[0]->path;
+				$brunch = $dcms->func->segment_url($url);
+				
+				//bar
+				//if ($this->is_login() == true) 	echo $this->show_bar($name,$url,$id,$dcms,$page[0]->design);
+				
+				//Перебор всех элементов страницы
+				foreach($d_all_page_items as $d_iid)
+				{
+					if ((isset($d_iid->ful_copy_id)) && ($d_iid->ful_copy_id != 0 )){ //элементы ссылающиеся на другие
+						$copy_text = $dcms->db->select("designes_items","id='".$d_iid->ful_copy_id."'");
+						eval('?>'.$copy_text[0]->text);
+					} else {
+						if ($d_iid->komp == 0)	{ eval('?>'.$d_iid->text);	} // элементы текст / php
+						else { // элементы  компоненты
+							$use_com = $d_iid->komp;
+							$com = $dcms->db->select("coms","id='".$use_com."'"); 
+							$com_filds = $dcms->db->select("coms_fields","parent='".$com[0]->id."' AND type=14"); 
+							//print_r($com_filds); //!
+							if ($com[0]->query == '') $query = 'ORDER BY d_sort ASC'; else $query = $com[0]->query;
+							{
+								$tab_name = $com[0]->table_name;
+								eval('?>'.$com[0]->code);
+								$pagination='';
+								$addp_sql='';
+									/* pagination*/
+									
+									$sqlcount = db::$mysqli->query("SELECT id FROM ".$tab_name." WHERE page_item=".$d_iid->id); 
+									$rowcount = $sqlcount->num_rows;
+									
+									$total = $rowcount[0]; // всего записей
+									//echo $total;	
+									if ((isset($page_size)) && ($total > $page_size )){ //Пагинация доступна под $pagination;
+										$pagination = '<ul class="pagination">';
+										$pahe_count = ceil($total/$page_size); 
+										$page_num = 0;
+										$p_min = 0;
 										$p_count = $page_size;
-									}
-									//echo 'min'.$p_min;
-									//echo 'max'.$p_count; 
-									$addp_sql = 'LIMIT '.$p_min.', '.$p_count;
-									//echo $addp_sql;
-									for($pgi=0; $pgi<$pahe_count; $pgi++){
-										$page_num++;
-										if ((isset($_GET['page'])) && ($_GET['page'] == $page_num)) {
-											$pagination  .= ' <li class="active"><a href="?page='.$page_num.'">'.$page_num.'</a></li>';
+										if ((isset($_GET['page'])) && ($_GET['page'] <> 1)) {
+											$p_min = $_GET['page']*$page_size-$page_size;
+											$p_count = $page_size;
 										}
-										else
-										{
-											if ((!isset($_GET['page'])) && (1 == $page_num)) {
-												$pagination  .= ' <li class="active" ><a href="?page='.$page_num.'">'.$page_num.'</a></li>';
-											}else{
-												$pagination  .= ' <li><a href="?page='.$page_num.'">'.$page_num.'</a></li>';
+										//echo 'min'.$p_min;
+										//echo 'max'.$p_count; 
+										$addp_sql = 'LIMIT '.$p_min.', '.$p_count;
+										//echo $addp_sql;
+										for($pgi=0; $pgi<$pahe_count; $pgi++){
+											$page_num++;
+											if ((isset($_GET['page'])) && ($_GET['page'] == $page_num)) {
+												$pagination  .= ' <li class="active"><a href="?page='.$page_num.'">'.$page_num.'</a></li>';
+											}
+											else
+											{
+												if ((!isset($_GET['page'])) && (1 == $page_num)) {
+													$pagination  .= ' <li class="active" ><a href="?page='.$page_num.'">'.$page_num.'</a></li>';
+												}else{
+													$pagination  .= ' <li><a href="?page='.$page_num.'">'.$page_num.'</a></li>';
+												}
 											}
 										}
+										$pagination .= '</ul>';
 									}
-									$pagination .= '</ul>';
-								}
-								
-								/* ens pagination*/
-							if ($comp_query_all = $dcms->db->select($tab_name,"page_item='".$d_iid->id."' " . $query.' '.$addp_sql))
-							{
-								
-								eval('?>'.$com[0]->list_prefix);
-								foreach( $comp_query_all as $ci)
+									
+									/* ens pagination*/
+								if ($comp_query_all = $dcms->db->select($tab_name,"page_item='".$d_iid->id."' " . $query.' '.$addp_sql))
 								{
 									
-									/*if((isset($com_filds[0]->param)) &&($com_filds[0]->param != 0)){ //com2
-										$com_var = $com_filds[0]->enname;
-										$ci->$com_var = "fake data"; 
-										$com2 = $dcms->db->select("coms","id='".$com_filds[0]->param."'"); 
-										$c2out .= $com2[0]->list_prefix;
-										$tab_name2 = $com2[0]->table_name;
-										if ($com[0]->query == '') $query2 = 'ORDER BY d_sort ASC'; else $query2 = $com2[0]->query;
-										
-										if ($comp_query_all2 = $dcms->db->select($tab_name2,"page_item='".$d_iid->id."' AND parent=".$ci->id." " . $query2.' '))
-										{
-											//echo '<pre>'; print_r($comp_query_all2 ); echo '</pre>';
-											foreach( $comp_query_all2 as $ci2)
-											{
-												$c2out .= $com2[0]->item;
-											}
-										}
-										$c2out .= $com2[0]->list_sufix;
-										
-										$ci->$com_var = $c2out; 
-										$c2out ='';
-									}
-									*/
-									eval('?>'.$com[0]->item);
-			
-								}
-								eval('?>'.$com[0]->list_sufix);
-							}
-							else {
-								if ($show_empty) {
 									eval('?>'.$com[0]->list_prefix);
+									foreach( $comp_query_all as $ci)
+									{
+										
+										/*if((isset($com_filds[0]->param)) &&($com_filds[0]->param != 0)){ //com2
+											$com_var = $com_filds[0]->enname;
+											$ci->$com_var = "fake data"; 
+											$com2 = $dcms->db->select("coms","id='".$com_filds[0]->param."'"); 
+											$c2out .= $com2[0]->list_prefix;
+											$tab_name2 = $com2[0]->table_name;
+											if ($com[0]->query == '') $query2 = 'ORDER BY d_sort ASC'; else $query2 = $com2[0]->query;
+											
+											if ($comp_query_all2 = $dcms->db->select($tab_name2,"page_item='".$d_iid->id."' AND parent=".$ci->id." " . $query2.' '))
+											{
+												//echo '<pre>'; print_r($comp_query_all2 ); echo '</pre>';
+												foreach( $comp_query_all2 as $ci2)
+												{
+													$c2out .= $com2[0]->item;
+												}
+											}
+											$c2out .= $com2[0]->list_sufix;
+											
+											$ci->$com_var = $c2out; 
+											$c2out ='';
+										}
+										*/
+										eval('?>'.$com[0]->item);
+				
+									}
 									eval('?>'.$com[0]->list_sufix);
 								}
+								else {
+									if ($show_empty) {
+										eval('?>'.$com[0]->list_prefix);
+										eval('?>'.$com[0]->list_sufix);
+									}
+								}
+								
 							}
-							
 						}
 					}
 				}
+			} else {
+				echo "Нет содержимого";
 			}
 		}
 		else
